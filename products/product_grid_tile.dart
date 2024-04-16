@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-// các ô sản phẩn
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:myshop/ui/cart/cart_manager.dart';
 import 'package:myshop/ui/products/products_manager.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +13,12 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile(
     this.product, {
-    super.key,
-  });
+    Key? key,
+    this.onAddToCartPressed, // để sử dụng thêm sp trong tìm kiếm
+  }) : super(key: key);
 
   final Product product;
+  final VoidCallback? onAddToCartPressed;// để sử dụng thêm sp trong tìm kiếm
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class ProductGridTile extends StatelessWidget {
             onAddToCartPressed: () {
               // Đọc ra CartManager dùng context.read
               final cart = context.read<CartManager>();
-              cart.addItem(product, 1);
+              cart.addCart(product, 1);
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -135,7 +137,7 @@ class ProductGridHeader extends StatelessWidget {
   }
 }
 
-// //footer bao gồm: icon_heart, title, icon_cart
+//footer bao gồm: icon_heart, title, icon_cart
 // class ProductGridFooter extends StatelessWidget {
 //   const ProductGridFooter({
 //     super.key,
@@ -148,8 +150,7 @@ class ProductGridHeader extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Expanded(
-//         child: Column(children: [
+//     return Column(children: [
 //       Text(product.title,
 //           maxLines: 1,
 //           overflow: TextOverflow.ellipsis,
@@ -181,7 +182,7 @@ class ProductGridHeader extends StatelessWidget {
 //               style: TextStyle(color: Colors.white, fontSize: 15),
 //             )),
 //       ),
-//     ]));
+//     ]);
 //   }
 // }
 
@@ -189,11 +190,11 @@ class ProductGridFooter extends StatelessWidget {
   const ProductGridFooter({
     Key? key,
     required this.product,
-    this.onAddToCartPressed,
+    this.onAddToCartPressed,// để sử dụng thêm sp trong tìm kiếm
   }) : super(key: key);
 
   final Product product;
-  final void Function()? onAddToCartPressed;
+  final VoidCallback? onAddToCartPressed; // Thêm hàm callback vào footer
 
   @override
   Widget build(BuildContext context) {
@@ -237,9 +238,9 @@ class ProductGridFooter extends StatelessWidget {
               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             ),
             onPressed: onAddToCartPressed,
-            child: Text( // xóa const
+            child: Text(
               "Add to cart",
-              style: GoogleFonts.lora( // Sử dụng font GoogleFonts.lora()
+              style: GoogleFonts.lora(
                 color: Colors.white,
                 fontSize: 15,
               ),
